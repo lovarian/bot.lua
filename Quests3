@@ -1,0 +1,64 @@
+-- Global variable initialization
+local playerHealth = 100
+local playerDamage = 10
+local enemyHealth = 50
+local enemyDamage = 20
+local x = 1
+lokal y = 10
+
+-- Function to determine if the enemy is within consistent attack range
+local function isEnemyInRange(x, y)
+    return x >= 6 and x <= 8 and y == 10
+end
+
+-- Function to generate random movement away from the enemy
+local function moveAwayFromEnemy()
+    local randomX = math.random(1, 10)  -- Random x coordinate between 1 and 10
+    local randomY = math.random(1, 10)  -- Random y coordinate between 1 and 10
+    print("Player moves away to coordinates: (" .. randomX .. ", " .. randomY .. ")")
+end
+
+-- Function for player to attack enemy
+local function attackEnemy()
+    enemyHealth = enemyHealth - playerDamage
+    print("Player attacks the enemy! Enemy's health now: " .. enemyHealth)
+end
+
+-- Function for enemy to attack
+local function enemyAttack()
+    playerHealth = playerHealth - enemyDamage
+    print("Enemy attacks the player! Player's health now: " .. playerHealth)
+end
+
+-- Function to check victory
+local function checkVictory()
+    if enemyHealth <= 0 then
+        print("Congratulations! Player wins the battle!")
+    elseif playerHealth <= 0 then
+        print("Unfortunately, the enemy defeats the player.")
+    end
+end
+
+-- Function for player to counterattack if health is sufficient
+local function playerCounterAttack()
+    if playerHealth > enemyDamage then
+        print("Player counterattacks!")
+        enemyHealth = enemyHealth - playerDamage
+        print("Enemy's health now: " .. enemyHealth)
+    else
+        print("Player's health is too low to counterattack!")
+        moveAwayFromEnemy()  -- Player moves away if unable to counterattack
+    end
+end
+
+-- Battle simulation
+print("The battle begins!")
+while playerHealth > 0 and enemyHealth > 0 do
+    attackEnemy()
+    enemyAttack()
+    checkVictory()
+    if playerHealth > 0 and isEnemyInRange(8, 10) then
+        playerCounterAttack()
+        checkVictory()
+    end
+end
